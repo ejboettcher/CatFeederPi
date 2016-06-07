@@ -1,0 +1,68 @@
+* Starting point    
+  http://drstrangelove.net/2013/12/raspberry-pi-power-cat-feeder-updates/
+
+* GPIO pin outs
+
+  https://www.raspberrypi.org/documentation/usage/gpio-plus-and-raspi2/
+
+* RPIO python modules for GPIO pins
+
+** original came from here:
+   https://github.com/metachris/RPIO
+   does not work current with pi 3
+
+** Raspberry pi 3 needs different RPIO used:
+   https://github.com/limuxy/RPIO
+   need to be root import RPIO
+   
+* TODO  WIFI set up 
+  For now, ran ethernet cable to work bench
+  rpi ip address 192.168.2.161  for ethernet, manually assigned in router
+
+  wireless set up described here:
+
+https://www.raspberrypi.org/documentation/configuration/wireless/wireless-cli.md
+
+* Raspberry Pi and servos
+  https://learn.adafruit.com/adafruits-raspberry-pi-lesson-8-using-a-servo-motor/hardware
+
+** Technical details of servo:
+
+   https://www.adafruit.com/products/154
+
+   Operating Voltage: 4.8V~6V (5V works best)
+   Average Speed: ~0.18sec/60°
+   Stall Torque (4.8V): 3kg.cm/41.74oz.in
+   Stall Torque (6V): 3.2kg.com/44.52oz.in
+   Required Pulse: 500us-2500us
+   Connector Wire Length: 30cm / 11.8"
+   Dimensions: 37mm x 54mm x 20mm / 1.5" x 2.1" x 0.8"
+   Weight (no horns): 40g
+   Spline Count: 25
+
+** attach servo power with common ground as signal line
+
+** code for testing - must run GPIO commands as root with sudo
+
+#+begin_src python
+
+import RPi.GPIO as GPIO
+import time
+
+GPIO.setmode(GPIO.BCM)
+
+servo1Pin = 18
+
+GPIO.setup(servo1Pin,GPIO.OUT)
+servo1 = GPIO.PWM(servo1Pin,50) # 50 is pulse frequency in Hz
+servo1.start(10.5)              # 10.5 is duty cycle of pulse on 
+time.sleep(10.)
+servo1.stop()
+
+# when done, do this to clear GPIO settings.
+GPIO.cleanup()
+
+#+end_src
+
+* OpenCV on PI
+  http://www.pyimagesearch.com/2015/10/26/how-to-install-opencv-3-on-raspbian-jessie/
