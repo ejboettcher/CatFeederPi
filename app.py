@@ -6,6 +6,7 @@ import threading
 from camera_pi import Camera
 from runface   import Runface
 from motiondet import MotionDet
+
 import json
 import time
 import numpy as np
@@ -16,9 +17,10 @@ import piexif
 import io
 
 #from PIL.ExifTags import TAGS
+# Evelyn Boettcher
+# DiDacTex, LLC 2016
 
-
-app 			= Flask(__name__)
+app 		= Flask(__name__)
 camera 		= Camera()
 runFace 	= Runface()
 motionDet 	= MotionDet()
@@ -27,21 +29,21 @@ framecount 	= 0
 @app.route('/')
 def index(): 
     """Video streaming home page."""
-    return render_template('index.html')
+    return render_template('./files/index.html')
 
 
 def gen(camera, facedet, movedet):
-    """Vdeo streaming generator functipython."""
+    """Video streaming generator functipython."""
     
     while True:
-        frame, npframe = camera.get_frame()
+       frame, npframe = camera.get_frame()
 	   saveStill(npframe)
 		
         # Run Face???
-        det,ffaceRects, pfaceRects=facedet.get_detection(npframe)
+        #det,ffaceRects, pfaceRects=facedet.get_detection(npframe)
 
         # Run Motions detections
-        movedet.get_movement(det,ffaceRects,pfaceRects,npframe)
+        #movedet.get_movement(det,ffaceRects,pfaceRects,npframe)
       
        
        	yield (b'--frame\r\n'
@@ -49,13 +51,13 @@ def gen(camera, facedet, movedet):
 	
 def stillCall(camera,facedet,movedet):		
         frame, npframe = camera.get_frame()
-	saveStill(npframe)
+		saveStill(npframe)
 			
         # Run Face???
-        det,ffaceRects, pfaceRects=facedet.get_detection(npframe)
+        #det,ffaceRects, pfaceRects=facedet.get_detection(npframe)
 
         # Run Motions detections
-        movedet.get_movement(det,ffaceRects,pfaceRects,npframe)
+        # movedet.get_movement(det,ffaceRects,pfaceRects,npframe)
       
        
 	     
@@ -67,7 +69,7 @@ def still_feed():
     stillCall(camera, runFace,motionDet)
      
     #stackoverfloow.com/questions/11017466
-    filename = "./static/stillimg.jpg"
+    filename = "./files/stillimg.jpg"
     return send_file(filename,mimetype='image/jpeg')
 
 @app.route('/video_feed')
@@ -85,11 +87,11 @@ def saveStill(npframe):
 	global framecount
         	
 	if 'lastStill' in globals():
-		lastStill=lastStill
+		lastStill = lastStill
 	else:
-		lastStill=time.time()
+		lastStill = time.time()
 		j=Image.fromarray(np.uint8(cv2.cvtColor(npframe,cv2.COLOR_BGR2RGB)))
-		j.save("./static/stillimg.jpg", format='JPEG')	
+		j.save("./files/stillimg.jpg", format='JPEG')	
 
 	if time.time()-lastStill>0.6:
 		lastStill = time.time()
@@ -140,7 +142,7 @@ def json_det():
      global runFace
      global MotionDet
      stillCall(camera, runFace,motionDet)
-     f 	= open("./det_output/json_det.txt", 'r')
+     f 	= open("./files/json_det.txt", 'r')
      status  = f.read()
      f.close()
      #print "Json call status: " + print(cls.det_list)status
