@@ -43,5 +43,8 @@ if __name__=='__main__':
 
     servo1 = Servo(servo1Pin,pulseFreq,dutyCycle)
     servo1.run(10.0)
+
+    servo2 = Servo(servo2Pin,pulseFreq,dutyCycle)
+    servo2.run(10.0)
     
     GPIO.cleanup()
