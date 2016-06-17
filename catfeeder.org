@@ -76,3 +76,16 @@ sudo apt-get install build-essential git cmake pkg-config
 sudo apt-get install libjpeg-dev libtiff5-dev libjasper-dev libpng12-dev
 sudo apt-get install libavcodec-dev libavformat-dev libswscale-dev libv4l-dev
 sudo apt-get install libxvidcore-dev libx264-dev libgtk2.0-dev libatlas-base-dev gfortran python2.7-dev python3-dev
+
+wget https://github.com/Itseez/opencv/archive/master.zip
+
+
+* UV4L 
+  another option for streaming rpi video
+http://raspberrypi.stackexchange.com/questions/22372/using-the-uv4l-driver-to-stream-video-from-the-raspberry-pi-camera-to-android-ph
+
+wget http://www.linux-projects.org/listing/uv4l_repo/lrkey.asc && sudo apt-key add ./lrkey.asc
+Adding line to apt sources -->> deb http://www.linux-projects.org/listing/uv4l_repo/raspbian/ wheezy main
+sudo apt-get update
+sudo apt-get install uv4l uv4l-raspicam
+sudo apt-get install uv4l-raspicam-extras
