@@ -1,3 +1,6 @@
+* google docs
+  https://docs.google.com/presentation/d/1TZCzITqmD1OeQ84l7Q5ObBVgcehMVV5EgQcKjoUz2kc/edit?ts=57657cc3#slide=id.p
+
 * Starting point    
   http://drstrangelove.net/2013/12/raspberry-pi-power-cat-feeder-updates/
 
@@ -85,7 +88,7 @@ wget https://github.com/Itseez/opencv/archive/master.zip
 http://raspberrypi.stackexchange.com/questions/22372/using-the-uv4l-driver-to-stream-video-from-the-raspberry-pi-camera-to-android-ph
 
 wget http://www.linux-projects.org/listing/uv4l_repo/lrkey.asc && sudo apt-key add ./lrkey.asc
-Adding line to apt sources -->> deb http://www.linux-projects.org/listing/uv4l_repo/raspbian/ wheezy main
+Adding line to /etc/apt/sources.list: "deb http://www.linux-projects.org/listing/uv4l_repo/raspbian/ wheezy main"
 sudo apt-get update
 sudo apt-get install uv4l uv4l-raspicam
 sudo apt-get install uv4l-raspicam-extras
