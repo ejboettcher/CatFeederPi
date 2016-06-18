@@ -20,13 +20,18 @@
    python setup.py build
    sudo python setup.py install
    
-* TODO  WIFI set up 
+* DONE WIFI set up 
+  CLOSED: [2016-06-18 Sat 16:44]
   For now, ran ethernet cable to work bench
   rpi ip address 192.168.2.161  for ethernet, manually assigned in router
 
   wireless set up described here:
 
 https://www.raspberrypi.org/documentation/configuration/wireless/wireless-cli.md
+
+  All configured, use the following IP address: 192.168.2.26
+
+  Wired network will be 192.168.2.161
 
 * Raspberry Pi and servos
   https://learn.adafruit.com/adafruits-raspberry-pi-lesson-8-using-a-servo-motor/hardware
