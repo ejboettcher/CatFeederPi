@@ -2,6 +2,7 @@
 
 import RPi.GPIO as GPIO
 import time
+import sys
 
 class Servo(GPIO.PWM):
     """ 
@@ -41,10 +42,12 @@ if __name__=='__main__':
     pulseFreq = 50.0 # Hertz
     dutyCycle = 10.5 # percent
 
+    portionTime = float(sys.argv[1])
+
     servo1 = Servo(servo1Pin,pulseFreq,dutyCycle)
-    servo1.run(10.0)
+    servo1.run(portionTime)
 
     servo2 = Servo(servo2Pin,pulseFreq,dutyCycle)
-    servo2.run(10.0)
+    servo2.run(portionTime)
     
     GPIO.cleanup()
