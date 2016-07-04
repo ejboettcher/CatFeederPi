@@ -58,7 +58,7 @@ if __name__=='__main__':
                       help='Run left for Marilyn')
     parser.add_option('-b','--both',
                       action='store_true',
-                      default=True,
+                      default=False,
                       help='Feed both')
     
     cmdargs,remainder = parser.parse_args()
@@ -83,6 +83,7 @@ if __name__=='__main__':
         print "Verbose   = %s"%str(verbose)
         print "FeedRight = %s"%str(feedRight)
         print "FeedLeft  = %s"%str(feedLeft)
+        print "FeedBoth  = %s"%str(cmdargs.both)
         print "Dry run   = %s"%str(cmdargs.dryrun)
         print "Portion   = %s seconds"%str(portionTime)
         
