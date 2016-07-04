@@ -39,27 +39,56 @@ class Servo(GPIO.PWM):
 if __name__=='__main__':
 
     parser = optparse.OptionParser()
-    parser.addoption('-d','--dry-run',
-                     action='store_true',
-                     default=False)
-    parser.addoption('--donna','--right',
-                     action='store_true',
-                     default=False)
-    parser.addoption('--marilyn','--left',
-                     action='store_true',
-                     default=False)
-    parser.addoption('--both',
-                     action='store_true',
-                     default=False)
+    parser.add_option('-v','--verbose',
+                      action='store_true',
+                      default=False,
+                      help='turn on verbosity')
+    parser.add_option('-d','--dry-run',
+                      dest='dryrun',
+                      action='store_true',
+                      default=False,
+                      help='show selections but do not run servos')
+    parser.add_option('-r','--right','--donna',
+                      action='store_true',
+                      default=False,
+                      help='Run right feeder for Donna')
+    parser.add_option('-l','--left','--marilyn',
+                      action='store_true',
+                      default=False,
+                      help='Run left for Marilyn')
+    parser.add_option('-b','--both',
+                      action='store_true',
+                      default=True,
+                      help='Feed both')
     
     cmdargs,remainder = parser.parse_args()
 
+    feedLeft  = cmdargs.left
+    feedRight = cmdargs.right
+    if cmdargs.both:
+        feedLeft  = True
+        feedRight = True
+
+    try:
+        portionTime = float(remainder[0])
+    except IndexError:
+        portionTime = 1.0
+        
+    verbose = cmdargs.verbose
+
+    if cmdargs.dryrun:
+        verbose=True
+
+    if verbose:
+        print "Verbose   = %s"%str(verbose)
+        print "FeedRight = %s"%str(feedRight)
+        print "FeedLeft  = %s"%str(feedLeft)
+        print "Dry run   = %s"%str(cmdargs.dryrun)
+        print "Portion   = %s seconds"%str(portionTime)
+        
     # dryrun option selected, exit without running servos
-    if cmdargs.d:
+    if cmdargs.dryrun:
         sys.exit(1)
-    
-    #portionTime = float(sys.argv[1])
-    portionTime = float(remainder[0])
     
     GPIO.setmode(GPIO.BCM)
 
@@ -69,13 +98,14 @@ if __name__=='__main__':
     pulseFreq = 50.0 # Hertz
     dutyCycle = 10.5 # percent
 
-    # quit for testing
-    sys.exit()
-
     servo1 = Servo(servo1Pin,pulseFreq,dutyCycle)
-    servo1.run(portionTime)
+
 
     servo2 = Servo(servo2Pin,pulseFreq,dutyCycle)
-    servo2.run(portionTime)
+
+    if feedRight:
+        servo1.run(portionTime)
+    if feedLeft:
+        servo2.run(portionTime)
     
     GPIO.cleanup()
