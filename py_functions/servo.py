@@ -48,11 +48,11 @@ if __name__=='__main__':
                       action='store_true',
                       default=False,
                       help='show selections but do not run servos')
-    parser.add_option('-r','--right','--donna',
+    parser.add_option('-r','--right','--marilyn',
                       action='store_true',
                       default=False,
                       help='Run right feeder for Donna')
-    parser.add_option('-l','--left','--marilyn',
+    parser.add_option('-l','--left', '--donna',
                       action='store_true',
                       default=False,
                       help='Run left for Marilyn')
