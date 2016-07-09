@@ -86,7 +86,8 @@ if __name__=='__main__':
     servo1 = Servo(servo1Pin,pulseFreq,dutyCycle)
     servo2 = Servo(servo2Pin,pulseFreq,dutyCycle)
 
-    portionTime = 1.0
+    portionTime1 = 0.5  # marilyn, left
+    portionTime2 = 1.0  # donna, right
     
     # set up the feeding schedule
     # feeding schedule
@@ -114,7 +115,8 @@ if __name__=='__main__':
 
         # scedule each event
         scheduler.enter(deltaSam,1,feedDaily,
-                        ((servo1,servo2),(portionTime,portionTime)))
+                        ((servo1,servo2),(portionTime1,portionTime2)))
+
         #scheduler.enter(deltaSam,1,feed,
         #                ((servo1,servo2),(portionTime,portionTime),10))
 
