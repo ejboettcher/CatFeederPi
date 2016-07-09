@@ -61,8 +61,14 @@ if __name__=='__main__':
 
     docopt_args = docopt(__doc__)
 
-    feedLeft  = docopt_args['--left']
-    feedRight = docopt_args['--right']
+    feedLeft    = docopt_args['--left']
+    feedRight   = docopt_args['--right']
+
+    feedDonna   = docopt_args['--donna']
+    feedMarilyn = docopt_args['--marilyn']
+
+    if feedDonna: feedRight = True
+    if feedMarilyn: feedLeft = True
     
     if docopt_args['--both']:
         feedLeft  = True
