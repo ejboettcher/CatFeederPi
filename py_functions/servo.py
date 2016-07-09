@@ -48,14 +48,15 @@ if __name__=='__main__':
                       action='store_true',
                       default=False,
                       help='show selections but do not run servos')
-    parser.add_option('-r','--right','--marilyn',
-                      action='store_true',
-                      default=False,
-                      help='Run right feeder for Donna')
-    parser.add_option('-l','--left', '--donna',
+    parser.add_option('-r','--left','--marilyn',
                       action='store_true',
                       default=False,
                       help='Run left for Marilyn')
+                      
+    parser.add_option('-l','--right', '--donna',
+                      action='store_true',
+                      default=False,
+                      help='Run right feeder for Donna')
     parser.add_option('-b','--both',
                       action='store_true',
                       default=False,
@@ -104,9 +105,9 @@ if __name__=='__main__':
 
     servo2 = Servo(servo2Pin,pulseFreq,dutyCycle)
 
-    if feedRight:
-        servo1.run(portionTime)
     if feedLeft:
+        servo1.run(portionTime)
+    if feedRight:
         servo2.run(portionTime)
     
     GPIO.cleanup()
