@@ -82,7 +82,7 @@ def feedDaily(servoList,portionTimeList):
 if __name__=='__main__':
 
     # this is a json file to hold feeding log information
-    jsonLogFile = 'log.json'
+    jsonLogFile = '/home/pi/log.json'
     feedLog = jsonlog.JsonLog(jsonLogFile)
 
     # each event in the log file should consist of:

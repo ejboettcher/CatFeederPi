@@ -101,7 +101,7 @@ if __name__=='__main__':
     
     GPIO.setmode(GPIO.BCM)
 
-    jsonLog = jsonlog.JsonLog('log.json')
+    jsonLog = jsonlog.JsonLog('/home/pi/log.json')
     
     servo1Pin = 18
     servo2Pin = 23
