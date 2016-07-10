@@ -20,6 +20,7 @@ Options:
 """
 
 import time
+import datetime
 import sys
 import optparse
 from docopt import docopt
@@ -27,6 +28,8 @@ try:
     import RPi.GPIO as GPIO
 except ImportError:
     print "GPIO module for Raspberry Pi not installed!"
+
+import jsonlog
 
 class Servo(GPIO.PWM):
     """ 
@@ -98,6 +101,8 @@ if __name__=='__main__':
     
     GPIO.setmode(GPIO.BCM)
 
+    jsonLog = jsonlog.JsonLog('log.json')
+    
     servo1Pin = 18
     servo2Pin = 23
 
@@ -106,12 +111,15 @@ if __name__=='__main__':
 
     servo1 = Servo(servo1Pin,pulseFreq,dutyCycle)
 
-
     servo2 = Servo(servo2Pin,pulseFreq,dutyCycle)
 
     if feedLeft:
         servo1.run(portionTime)
+        jsonLog.logEvent({'time':str(datetime.datetime.now()),
+                          'event':'Marilyn'})
     if feedRight:
         servo2.run(portionTime)
+        jsonLog.logEvent({'time':str(datetime.datetime.now()),
+                          'event':'Donna'})
     
     GPIO.cleanup()
