@@ -5,6 +5,8 @@ import time
 import datetime
 import sys
 import optparse
+import jsonlog
+
 try:
     import RPi.GPIO as GPIO
 except ImportError:
@@ -55,6 +57,11 @@ def feed(servoList,portionTimeList,period):
     for _servo,_portion in zip(servoList,portionTimeList):
         _servo.run(_portion)
         totPortion += _portion
+        # log the event
+        evtInfo = {'time':str(datetime.datetime.now()),
+                   'event':_servo.name}
+        feedLog.logEvent(evtInfo)
+    
         
     # before exiting, schedule next feeding
     print "Scheduling next feeding in %d seconds"%(period-totPortion)
@@ -74,6 +81,15 @@ def feedDaily(servoList,portionTimeList):
         
 if __name__=='__main__':
 
+    # this is a json file to hold feeding log information
+    jsonLogFile = 'log.json'
+    feedLog = jsonlog.JsonLog(jsonLogFile)
+
+    # each event in the log file should consist of:
+    # time and event in a dictionary such as
+    # event = {'time':str(datetime.datetime.now()),
+    #          'event':'Donna'}
+    
     # set up the servo control
     GPIO.setmode(GPIO.BCM)
 
@@ -85,6 +101,8 @@ if __name__=='__main__':
 
     servo1 = Servo(servo1Pin,pulseFreq,dutyCycle)
     servo2 = Servo(servo2Pin,pulseFreq,dutyCycle)
+    servo1.name = 'Marilyn'
+    servo2.name = 'Donna'
 
     portionTime1 = 0.5  # marilyn, left
     portionTime2 = 1.0  # donna, right
