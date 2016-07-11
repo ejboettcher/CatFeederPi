@@ -7,6 +7,7 @@ import sys
 import optparse
 import jsonlog
 import logging
+import os
 
 def time2sam(time):
     return time.hour*3600 + time.minute*60 + time.second
@@ -17,10 +18,16 @@ formatter = logging.Formatter('%(asctime)s %(levelname)s: %(message)s')
 ch=logging.StreamHandler()
 ch.setFormatter(formatter)
 logger.addHandler(ch)
-fh=logging.FileHandler('/home/pi/daily_feeder.log')
-fh.setFormatter(formatter)
-logger.addHandler(fh)
-
+try:
+    # this is necessary for debugging because only one logger
+    # may write to the same log file at a time. 
+    fh=logging.FileHandler('/home/pi/daily_feeder.log')
+    fh.setFormatter(formatter)
+    logger.addHandler(fh)
+except IOError:
+    logger.warn('No log file created')
+    pass
+    
 
 try:
     import RPi.GPIO as GPIO
@@ -93,8 +100,13 @@ def feedDaily(servoList,portionTimeList):
         
 if __name__=='__main__':
 
+    # starts from /etc/rc.local, but at this time the clock is set
+    # for UTC, so we have to set to our time zone
+    # we have to set the time zone for the script 
+    os.environ['TZ']='America/New_York'
+
     logger.debug('Starting up')
-    
+
     # this is a json file to hold feeding log information
     jsonLogFile = '/home/pi/log.json'
     feedLog = jsonlog.JsonLog(jsonLogFile)
