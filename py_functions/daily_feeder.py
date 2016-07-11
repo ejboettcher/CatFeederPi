@@ -6,14 +6,26 @@ import datetime
 import sys
 import optparse
 import jsonlog
+import logging
+
+def time2sam(time):
+    return time.hour*3600 + time.minute*60 + time.second
+
+logger = logging.getLogger()
+logger.level=logging.DEBUG
+formatter = logging.Formatter('%(asctime)s %(levelname)s: %(message)s')
+ch=logging.StreamHandler()
+ch.setFormatter(formatter)
+logger.addHandler(ch)
+fh=logging.FileHandler('/home/pi/daily_feeder.log')
+fh.setFormatter(formatter)
+logger.addHandler(fh)
+
 
 try:
     import RPi.GPIO as GPIO
 except ImportError:
-    print "GPIO module for Raspberry Pi not installed!"
-
-def time2sam(time):
-    return time.hour*3600 + time.minute*60 + time.second
+    logger.error( "GPIO module for Raspberry Pi not installed!")
 
 
 class Servo(GPIO.PWM):
@@ -50,7 +62,7 @@ def feed(servoList,portionTimeList,period):
     returns the feedtime
     """
     feedtime = datetime.datetime.now()
-    print 'Feeding at: %s'%str(feedtime)
+    logger.info('Feeding at: %s'%str(feedtime))
 
     totPortion = 0.0
     # run each servo the allocated amount of time
@@ -64,7 +76,7 @@ def feed(servoList,portionTimeList,period):
     
         
     # before exiting, schedule next feeding
-    print "Scheduling next feeding in %d seconds"%(period-totPortion)
+    logger.info("Scheduling next feeding in %d seconds"%(period-totPortion))
     scheduler.enter(period-totPortion,1,feed,(servoList,portionTimeList,period))
 
     return feedtime
@@ -81,10 +93,14 @@ def feedDaily(servoList,portionTimeList):
         
 if __name__=='__main__':
 
+    logger.debug('Starting up')
+    
     # this is a json file to hold feeding log information
     jsonLogFile = '/home/pi/log.json'
     feedLog = jsonlog.JsonLog(jsonLogFile)
 
+    logger.debug('Using json log file = %s',jsonLogFile)
+    
     # each event in the log file should consist of:
     # time and event in a dictionary such as
     # event = {'time':str(datetime.datetime.now()),
@@ -119,12 +135,12 @@ if __name__=='__main__':
     scheduler = sched.scheduler(time.time,time.sleep)
 
     # get the current time
-    print "Current time is %s"%str(datetime.datetime.now())
+    logger.info("Current time is %s"%str(datetime.datetime.now()))
     currTimeSam = time2sam(datetime.datetime.now())
     
     # for each feed at time, schedule the first job to run
     for _feedTime in feedAt:
-        print 'Scheduling feeding at %s'%str(_feedTime)
+        logger.info('Scheduling feeding at %s'%str(_feedTime))
         feedSam = time2sam(_feedTime) # get seconds after midnight
         deltaSam = feedSam - currTimeSam
 
