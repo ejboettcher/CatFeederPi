@@ -17,6 +17,12 @@ Options:
  -r --right --marilyn  feed marilyn on right
  -l --left --donna     feed donna on left
  -b --both             feed both
+
+This script can be added to the system crontab in order to schedule 
+feedings. To feed both cats at 5am and 5pm everyday, add the following
+lines using "crontab -e":
+0 5 * * * /home/pi/CatFeederPi/py_functions/servo.py --both
+0 17 * * * /home/pi/CatFeederPi/py_functions/servo.py --both
 """
 
 import time
